@@ -5,10 +5,6 @@
 	android:background="#FFF"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
-	<com.markupartist.android.widget.ActionBar
-        android:id="@+id/actionbar"
-        style="@style/ActionBar"
-    />
 	<ListView
 		android:id="@+id/lv_branchTreeList_list"
 		android:layout_width="fill_parent"

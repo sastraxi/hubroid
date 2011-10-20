@@ -26,7 +26,10 @@ public class Hubroid extends BaseActivity {
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, NO_LAYOUT);
+        super.onCreate(savedInstanceState);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         if (mUsername.equals("")) {
             startActivity(new Intent(Hubroid.this, Login.class));
         } else {

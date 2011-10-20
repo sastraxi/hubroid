@@ -13,7 +13,6 @@ import net.idlesoft.android.apps.github.R;
 import org.idlesoft.libraries.ghapi.APIAbstract.Response;
 import org.json.JSONObject;
 
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -21,10 +20,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -156,6 +153,7 @@ public class Dashboard extends BaseActivity {
         if (extras != null) {
             if (extras.getBoolean("fresh", false)) {
                 final byte defaultAction = (byte) mPrefs.getInt("dashboardDefault", 0);
+                /*
                 switch (defaultAction) {
                     case DEFAULT_ACTION_DASHBOARD:
                         break;
@@ -184,6 +182,7 @@ public class Dashboard extends BaseActivity {
                         finish();
                         break;
                 }
+                */
             }
         }
         setupActionBar("Hubroid", true, false);
@@ -206,8 +205,8 @@ public class Dashboard extends BaseActivity {
         title.setPadding(10, 0, 0, 0);
         custom.addView(title);
 
-        getActionBar().setDisplayShowCustomEnabled(true);
-        getActionBar().setCustomView(custom);
+        //getActionBar().setDisplayShowCustomEnabled(true);
+        //getActionBar().setCustomView(custom);
 
         OnLongClickListener onButtonLongClick = new OnLongClickListener() {
             @Override
@@ -241,6 +240,7 @@ public class Dashboard extends BaseActivity {
 
         logo.setOnLongClickListener(onButtonLongClick);
 
+        /*
         // News Feed
         final Button newsFeedBtn = (Button) findViewById(R.id.btn_dashboard_newsfeed);
         newsFeedBtn.setOnClickListener(new OnClickListener() {
@@ -294,6 +294,7 @@ public class Dashboard extends BaseActivity {
             }
         });
         gistsBtn.setOnLongClickListener(onButtonLongClick);
+        */
     }
 
     @Override
@@ -319,11 +320,6 @@ public class Dashboard extends BaseActivity {
             mGetLatestBlogPostTask.execute();
         }
         super.onResume();
-    }
-
-    @Override
-    public Object onRetainNonConfigurationInstance() {
-        return mGetLatestBlogPostTask;
     }
 
     @Override

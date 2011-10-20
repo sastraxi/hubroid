@@ -5,7 +5,10 @@
     <string name="app_version">2.0-beta6</string>
 
     <!-- Action bar strings -->
-    <string name="action_home_label">Home</string>
+    <string name="actionbar_home">Home</string>
+    <string name="actionbar_create">Create</string>
+    <string name="actionbar_search">Search</string>
+    <string name="actionbar_options">Options</string>
 
 	<!-- Splash/Login Activity -->
 	<string name="copyright">Copyright © 2011 Eddie Ringle</string>

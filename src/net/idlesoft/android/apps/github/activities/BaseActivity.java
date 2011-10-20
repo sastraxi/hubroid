@@ -3,24 +3,24 @@ package net.idlesoft.android.apps.github.activities;
 
 import net.idlesoft.android.apps.github.HubroidApplication;
 import net.idlesoft.android.apps.github.R;
+import net.idlesoft.android.apps.github.ThingsCommonToAllMankind;
 
 import org.eclipse.egit.github.core.client.GitHubClient;
 import org.idlesoft.libraries.ghapi.GitHubAPI;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActionBar;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.Menu;
+import android.support.v4.view.MenuItem;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.webkit.WebView;
 
-import com.markupartist.android.widget.ActionBar;
-import com.markupartist.android.widget.ActionBar.Action;
-
-public class BaseActivity extends Activity {
+public class BaseActivity extends FragmentActivity implements ThingsCommonToAllMankind {
     protected static final int NO_LAYOUT = -1;
 
     protected SharedPreferences mPrefs;
@@ -33,6 +33,14 @@ public class BaseActivity extends Activity {
 
     protected GitHubAPI mGApi;
 
+    /**
+     * onCreate method for BaseActivity
+     *
+     * Handles setting up initial layout, preferences, and GitHub API libraries
+     *
+     * @param icicle
+     * @param layout - Pass NO_LAYOUT (-1) if you don't want BaseActivity to set a layout
+     */
     protected void onCreate(final Bundle icicle, final int layout) {
         super.onCreate(icicle);
         if (layout != NO_LAYOUT) {
@@ -49,17 +57,27 @@ public class BaseActivity extends Activity {
         mGApi.authenticate(mUsername, mPassword);
     }
 
-    protected GitHubClient getGitHubClient() {
-        return HubroidApplication.getGitHubClientInstance().setCredentials(mUsername, mPassword);
+    /**
+     * Default onCreate
+     *
+     * Calls onCreate with NO_LAYOUT set, for activities that want to setContentView themselves.
+     */
+    protected void onCreate(final Bundle icicle) {
+        onCreate(icicle, NO_LAYOUT);
     }
 
-    protected ActionBar getActionBar() {
-        return (ActionBar) findViewById(R.id.actionbar);
+    /**
+     * Get a GitHubClient that has credentials set if they exist
+     *
+     * @return GitHubClient
+     */
+    public GitHubClient getGitHubClient() {
+        return HubroidApplication.getGitHubClientInstance().setCredentials(mUsername, mPassword);
     }
 
     public void setupActionBar(final String pTitle, final boolean pShowSearch,
             final boolean pShowCreate) {
-        final ActionBar actionBar = (ActionBar) findViewById(R.id.actionbar);
+        ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             int displayFlags = ActionBar.DISPLAY_SHOW_TITLE;
             if (!(this instanceof Dashboard)) {
@@ -67,7 +85,8 @@ public class BaseActivity extends Activity {
             }
             actionBar.setDisplayOptions(displayFlags);
 
-            getMenuInflater().inflate(R.menu.actionbar, actionBar.asMenu());
+            actionBar.setDisplayShowHomeEnabled(true);
+            //getMenuInflater().inflate(R.menu.actionbar, actionBar.asMenu());
 
             if (pTitle == null) {
                 actionBar.setTitle(R.string.app_name);
@@ -75,17 +94,17 @@ public class BaseActivity extends Activity {
                 actionBar.setTitle(pTitle);
             }
 
-            final Action createAction = (Action) actionBar.findAction(R.id.actionbar_item_create);
-            final Action searchAction = (Action) actionBar.findAction(R.id.actionbar_item_search);
+            //final Action createAction = (Action) actionBar.findAction(R.id.actionbar_item_create);
+            //final Action searchAction = (Action) actionBar.findAction(R.id.actionbar_item_search);
 
             if (pShowCreate) {
-                createAction.setEnabled(true);
-                createAction.setVisible(true);
+              //  createAction.setEnabled(true);
+                //createAction.setVisible(true);
             }
 
             if (pShowSearch) {
-                searchAction.setEnabled(true);
-                searchAction.setVisible(true);
+                //searchAction.setEnabled(true);
+                //searchAction.setVisible(true);
             }
         }
     }
@@ -103,46 +122,29 @@ public class BaseActivity extends Activity {
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.actionbar_item_home:
-                startActivity(new Intent(BaseActivity.this, Dashboard.class));
-                return true;
-            case R.id.actionbar_item_create:
-                return onCreateActionClicked();
-            case R.id.actionbar_item_search:
-                startActivity(new Intent(BaseActivity.this, Search.class));
-                return true;
-        }
-        return super.onMenuItemSelected(featureId, item);
-    }
-
-    public boolean onCreateActionClicked() {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Create preferences action
+        menu.add(0, 0, 0, "Options")
+            .setIcon(android.R.drawable.ic_menu_preferences)
+            .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+        menu.add(0, 1, 0, "Logout")
+            .setIcon(android.R.drawable.ic_lock_power_off)
+            .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(final MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
         switch (item.getItemId()) {
             case 1:
                 mPrefsEditor.clear().commit();
-                final Intent intent = new Intent(this, Hubroid.class);
-                startActivity(intent);
+                startActivity(new Intent(this, Hubroid.class));
                 return true;
             case 0:
-                startActivity(new Intent(this, HubroidPreferences.class));
+                //startActivity(new Intent(this, HubroidPreferences.class));
                 return true;
         }
-        return false;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(final Menu menu) {
-        if (menu.hasVisibleItems()) {
-            menu.clear();
-        }
-        menu.add(0, 0, 0, "Settings").setIcon(android.R.drawable.ic_menu_preferences);
-        menu.add(0, 1, 0, "Logout").setIcon(android.R.drawable.ic_lock_power_off);
         return true;
     }
 
@@ -168,5 +170,20 @@ public class BaseActivity extends Activity {
         } else {
             return super.dispatchKeyEvent(event);
         }
+    }
+
+    @Override
+    public GitHubAPI getGApi() {
+        return mGApi;
+    }
+
+    @Override
+    public SharedPreferences getPrefs() {
+        return mPrefs;
+    }
+
+    @Override
+    public Editor getPrefsEditor() {
+        return mPrefsEditor;
     }
 }

@@ -5,10 +5,6 @@
 	android:orientation="vertical"
 	android:layout_height="fill_parent"
 	android:layout_width="fill_parent">
-	<com.markupartist.android.widget.ActionBar
-        android:id="@+id/actionbar"
-        style="@style/ActionBar"
-    />
 	<include android:id="@+id/include_activity_item" layout="@layout/activity_item" />
 	<LinearLayout
 		android:id="@+id/ll_single_activity_item_strip"
@@ -23,6 +19,5 @@
 	<WebView
 		android:id="@+id/wv_single_activity_item_content"
 		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:layout_below="@id/actionbar" />
+		android:layout_height="fill_parent" />
 </LinearLayout>

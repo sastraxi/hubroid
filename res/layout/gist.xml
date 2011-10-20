@@ -4,10 +4,6 @@
 	android:background="#FFF"
 	android:layout_height="fill_parent"
 	android:layout_width="fill_parent">
-	<com.markupartist.android.widget.ActionBar
-        android:id="@+id/actionbar"
-        style="@style/ActionBar"
-    />
 	<LinearLayout
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
